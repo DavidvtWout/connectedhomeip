@@ -72,6 +72,21 @@ CHIP_ERROR ThreadStackManagerImpl::_InitThreadStack()
     return CHIP_NO_ERROR;
 }
 
+CHIP_ERROR ThreadStackManagerImpl::_AttachToThreadStack()
+{
+    CHIP_ERROR err = CHIP_NO_ERROR;
+    err = GenericThreadStackManagerImpl_OpenThread<ThreadStackManagerImpl>::DoAttach(esp_openthread_get_instance());
+    ReturnErrorOnFailure(err);
+#if !defined(CONFIG_CHIP_USE_OT_ENDPOINT) && defined(CONFIG_CHIP_DEVICE_ENABLE_THREAD_MESHCOP)
+    RunOnTCPIP([this]() {
+        esp_netif_t * openthread_netif = esp_openthread_get_netif();
+        chip::Inet::InterfaceId interface(netif_get_by_index(esp_netif_get_netif_impl_index(openthread_netif)));
+        GenericThreadStackManagerImpl_OpenThread<ThreadStackManagerImpl>::SetRendezvousNetworkInterface(interface);
+    });
+#endif
+    return CHIP_NO_ERROR;
+}
+
 CHIP_ERROR ThreadStackManagerImpl::_StartThreadTask()
 {
     openthread_launch_task();

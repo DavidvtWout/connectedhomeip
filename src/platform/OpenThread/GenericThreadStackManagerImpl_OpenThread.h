@@ -147,6 +147,7 @@ protected:
     // ===== Members available to the implementation subclass.
 
     CHIP_ERROR ConfigureThreadStack(otInstance * otInst);
+    CHIP_ERROR DoAttach(otInstance * otInst);
     CHIP_ERROR DoInit(otInstance * otInst);
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD_MESHCOP
     void SetRendezvousNetworkInterface(chip::Inet::InterfaceId interfaceId) { mRendezvousInterface = interfaceId; }

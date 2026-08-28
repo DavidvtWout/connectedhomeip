@@ -758,6 +758,14 @@ exit:
 }
 
 template <class ImplClass>
+CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::DoAttach(otInstance * otInst)
+{
+    VerifyOrReturnError(otInst != nullptr, CHIP_ERROR_INVALID_ARGUMENT);
+    mOTInst = otInst;
+    return CHIP_NO_ERROR;
+}
+
+template <class ImplClass>
 CHIP_ERROR GenericThreadStackManagerImpl_OpenThread<ImplClass>::DoInit(otInstance * otInst)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
